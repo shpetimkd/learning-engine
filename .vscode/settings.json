@@ -1,0 +1,40 @@
+{
+    // Format on save with the default formatter
+    "editor.formatOnSave": true,
+  
+    // Use ESLint for JavaScript and TypeScript files
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+  
+    // Ensure ESLint is used as the formatter for JavaScript and TypeScript
+    "[javascript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+  
+    // Optional: Enable/disable format on save for specific languages
+    "[html]": {
+      "editor.formatOnSave": false
+    },
+  
+    // Configuration for Prettier
+    "prettier.singleQuote": true,
+    "prettier.semi": true,
+  
+    // If using React, to avoid conflicts with JSX
+    "javascript.format.enable": false,
+    "typescript.format.enable": false,
+  
+    // Ensure Prettier respects the project's configuration
+    "prettier.useEditorConfig": false
+  }
+  
