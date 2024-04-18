@@ -12,8 +12,8 @@ export default function BuildAlgorithm() {
     try {
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL as string, values);
 
-      if (response.status === 201) {
-        setAlertMessage(response.data);
+      if (response.status === 200) {
+        setAlertMessage(response.data.body);
         form.resetFields();
 
         setTimeout(() => {
