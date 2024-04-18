@@ -177,15 +177,17 @@ export default function UserDetails() {
           />
 
         </Col>
-        <Col span={12} style={{ margin: 12 }}>
-          <Text>
+        { userData.length &&
+          <Col span={12} style={{ margin: 12 }}>
+            <Text>
             This configuration details the setup for <Text style={{ fontWeight: 600 }}>{userData?.[0]?.algorithm.name}</Text>, a machine learning algorithm. It initializes using a specified <Text style={{ fontWeight: 600 }}>{userData?.[0]?.algorithm.defaultPath}</Text>, ensuring consistency in data handling and processing workflows.
             The algorithm is structured to process data sequences based on the <Text style={{ fontWeight: 600 }}>{userData?.[0]?.algorithm.sequence_id}</Text> method, strategically prioritizing the least proficient data points to optimize learning and adaptation processes early in the training phase.
             Key performance thresholds are set to dynamically adjust the learning interventions: a tutorial mode is triggered for predictions below a <Text style={{ fontWeight: 600 }}>{userData?.[0]?.algorithm.tutorial_less_than}</Text>% accuracy threshold, while a reinforcement strategy is applied when prediction accuracy exceeds <Text style={{ fontWeight: 600 }}>{userData?.[0]?.algorithm.reinforcement_greater_than}</Text>%. This approach allows for targeted learning enhancements based on model performance metrics.
             A minimum dataset size of <Text style={{ fontWeight: 600 }}>{userData?.[0]?.algorithm.minimum_dataset_size}</Text> is required, ensuring the algorithm has sufficient data to generate reliable predictions and avoid overfitting on sparse data.
             Additionally, the <Text style={{ fontWeight: 600 }}>{userData?.[0]?.algorithm.enable_gates}</Text> flag is used to activate or deactivate conditional processing gates, providing flexibility in managing complex learning pathways or experimental features.
-          </Text>
-        </Col>
+            </Text>
+          </Col>
+        }
       </Row>
     </div>
   );
