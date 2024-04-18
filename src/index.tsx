@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import SidebarLayout from './components/SidebarLayout';
 import Home from './pages/BuildAlgorithm';
 import ListAlgorithms from './pages/ListAlgorithms';
-import UsersData from './pages/UsersData';
+import AlgorithmsUser from './pages/AlgorithmUser';
 import UserDetails from './pages/UserDetails';
 
 const router = createBrowserRouter([
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/algorithms',
-        element: <UsersData />,
+        element: <AlgorithmsUser />,
       },
       {
         path: '/users',

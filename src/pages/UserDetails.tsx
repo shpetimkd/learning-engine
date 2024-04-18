@@ -1,13 +1,13 @@
-import { List, Tag, Typography, Select, Row, Col, Space, Flex } from 'antd';
-import { Option } from 'antd/es/mentions';
+import { List, Tag, Typography, Row, Col, Space, Flex } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const { Title } = Typography;
 const { Text } = Typography;
 
 interface AlgorithmsResponse { name: string; id: string }
-interface LearnersCollection { name: string; days: number; path: any[] }
+interface LearnersCollection { name: string; days: number; path: any[]; results: any }
 
 const defaultStyle = {
   backgroundColor: '#e5e5f7',
@@ -30,27 +30,30 @@ const tagStyle = {
   color: 'black',
 };
 
-export default function ListAlgorithms() {
+export default function UserDetails() {
+  const location = useLocation();
+  const user = location.state?.user;
+  const selectedAlgorithm = location.state?.selectedAlgorithm;
+  console.log(selectedAlgorithm);
   const apiUrl = process.env.REACT_APP_BACKEND_URL as string;
   const [algorithms, setAlgorithms] = useState<AlgorithmsResponse[]>([]);
   const [userData, setUserData] = useState<LearnersCollection[]>([]);
 
-  const listAlgorithms = async () => {
+  //   const listAlgorithms = async () => {
+  //     try {
+  //       const response = await axios.get();
+
+  //       if (response.status === 200) {
+  //         setAlgorithms(response.data);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  const listData = async () => {
     try {
-      const response = await axios.get(`${apiUrl}list-algorithms`);
-
-      if (response.status === 200) {
-        setAlgorithms(response.data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const listData = async (value: string) => {
-    try {
-      const response = await axios.get(`${apiUrl}defined-path?file=${value}`);
-
+      const response = await axios.post(`${apiUrl}users-data?file=${selectedAlgorithm}&user=${user}`);
       if (response.status === 200) {
         setUserData(response.data);
       }
@@ -60,7 +63,7 @@ export default function ListAlgorithms() {
   };
 
   const onChange = async (value: string) => {
-    await listData(value);
+    await listData();
   };
 
   const getColor = (tag: string) => {
@@ -80,23 +83,21 @@ export default function ListAlgorithms() {
   };
 
   useEffect(() => {
-    listAlgorithms();
+    if (selectedAlgorithm) {
+      onChange(selectedAlgorithm);
+    }
   }, []);
 
+  if (!user) {
+    return <></>;
+  }
+
   return (
-    <div style={{ background: 'white', padding: 24, minHeight: '100vh' }}>
+    <div style={{ background: 'white', padding: 24, minHeight: '100vh', maxWidth: '100vw' }}>
       <Row style={{ marginBottom: '3rem' }}>
         <Col span={16}>
-          <Title level={4}>Est. Class Learning Days: 15</Title>
-        </Col>
-        <Col style={{ marginTop: '1.5rem' }}>
-          <Select style={{ width: '300px' }} placeholder="Select path" onChange={onChange}>
-            {
-              algorithms && algorithms?.map((algo: AlgorithmsResponse) => {
-                return <Option key={algo.id} value={algo.name}>{algo?.name}</Option>;
-              })
-            }
-          </Select>
+          <Title level={4}>{user}</Title>
+          <Title level={4}>{selectedAlgorithm}</Title>
         </Col>
       </Row>
 
@@ -105,27 +106,7 @@ export default function ListAlgorithms() {
         renderItem={item => (
           <List.Item>
             <Space align="start" size="large">
-              <Flex gap="middle" vertical>
-                <Tag
-                  key={item.name}
-                  style={{
-                    display: 'inline-flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '4rem',
-                    height: '4rem',
-                    margin: '4px',
-                    padding: 0,
-                    overflow: 'hidden',
-                    fontSize: '0.75rem'
-                  }}
-                >
-                  <Flex style={{ backgroundColor: 'ButtonHighlight', padding: '0.5rem' }} vertical={true}>
-                    <Text>{item.name}</Text>
-                    <Text strong>{`${item.days} days`}</Text>
-                  </Flex>
-                </Tag>
-              </Flex>
+              <Title level={5}>Path</Title>
               <Flex gap="middle" vertical>
                 <Flex vertical={false}>
                   {item.path.map((tag: any) => {
@@ -136,6 +117,43 @@ export default function ListAlgorithms() {
                         style={styleForDefaultPattern(tag)}
                       >
                         {tag}
+                      </Tag>
+                    );
+                  })}
+                </Flex>
+              </Flex>
+            </Space>
+          </List.Item>
+        )}
+        style={{ width: '100%' }}
+      />
+
+      <List
+        dataSource={userData}
+        renderItem={item => (
+          <List.Item>
+            <Space align="start" size="large">
+              <Title level={5}>Results</Title>
+              <Flex gap="middle">
+                <Flex vertical={true}>
+                  {Object.entries(item.results).map((c: any) => {
+                    return (
+                      <Tag
+                        color={'blue'}
+                        key={c[0]}
+                        style={{
+                          display: 'inline-flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          overflow: 'hidden',
+                          fontSize: '0.75rem',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          color: 'black',
+                          margin: 4,
+                        }}
+                      >
+                        {c?.[0]}: Correct: {c?.[1]?.correct}, Incorrect: {c?.[1]?.incorrect}
                       </Tag>
                     );
                   })}
